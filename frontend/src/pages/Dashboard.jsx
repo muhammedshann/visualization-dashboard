@@ -6,7 +6,7 @@ import LikelihoodChart from "../components/LikelihoodChart";
 import TopicChart from "../components/TopicChart";
 import RegionChart from "../components/RegionChart";
 import YearChart from "../components/YearChart";
-import Filters from "../components/Filters";
+import Filters from "../components/filters";
 
 function Dashboard() {
     const [data, setData] = useState([]);
