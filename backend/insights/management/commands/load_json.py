@@ -8,24 +8,19 @@ class Command(BaseCommand):
     help = "Imports data from jsondata.json without duplicates"
 
     def handle(self, *args, **kwargs):
-        # 1. Use an absolute path so Render doesn't get lost
+        # Use absolute path for Render
         file_path = os.path.join(settings.BASE_DIR, "jsondata.json")
-        
-        if not os.path.exists(file_path):
-            self.stderr.write(f"File not found at {file_path}")
-            return
 
         with open(file_path, encoding="utf-8") as file:
             data = json.load(file)
 
-        # 2. Check if data already exists to prevent duplicates
         if Insight.objects.exists():
-            self.stdout.write(self.style.WARNING("Data already exists in database. Skipping import to avoid duplicates."))
+            self.stdout.write("Data already exists. Skipping.")
             return
 
         objects = []
         for item in data:
-            # 3. Clean numeric fields (Intensity/Likelihood can sometimes be empty strings in JSON)
+            # Helper to handle empty strings in numeric fields
             def clean_int(val):
                 try:
                     return int(val) if val else None
@@ -42,21 +37,23 @@ class Command(BaseCommand):
                     region=item.get("region"),
                     city=item.get("city"),
                     sector=item.get("sector"),
-                    topic=item.get("topic") or item.get("topics"), # Handle both field names
-                    pestle=item.get("pestle") or item.get("pest"),
+                    # FIX: Use 'topics' to match your model
+                    topics=item.get("topic") or item.get("topics"), 
+                    # FIX: Use 'pest' to match your model
+                    pest=item.get("pestle") or item.get("pest"),
                     swot=item.get("swot"),
                     intensity=clean_int(item.get("intensity")),
                     likelihood=clean_int(item.get("likelihood")),
                     relevance=clean_int(item.get("relevance")),
                     impact=item.get("impact"),
-                    start_year=item.get("start_year"),
-                    end_year=item.get("end_year"),
+                    start_year=clean_int(item.get("start_year")),
+                    end_year=clean_int(item.get("end_year")),
                     year=clean_int(item.get("year")),
-                    added=item.get("added"),
-                    published=item.get("published"),
+                    # Note: Ensure your JSON date format matches YYYY-MM-DD
+                    added=item.get("added")[:10] if item.get("added") else None,
+                    published=item.get("published")[:10] if item.get("published") else None,
                 )
             )
 
-        # 4. Use bulk_create for speed
         Insight.objects.bulk_create(objects)
-        self.stdout.write(self.style.SUCCESS(f"Successfully imported {len(objects)} insights!"))
+        self.stdout.write(self.style.SUCCESS(f"Imported {len(objects)} insights!"))
