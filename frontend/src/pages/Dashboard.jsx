@@ -12,16 +12,16 @@ function Dashboard() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({});
-    const [originalData, setOriginalData] = useState([]);
+    // const [originalData, setOriginalData] = useState([]);
 
     const loadData = async () => {
         setLoading(true);
         try {
             const res = await fetchInsights(filters);
             setData(res.data);
-            if (originalData.length === 0) {
-                setOriginalData(res.data);
-            }
+            // if (originalData.length === 0) {
+            //     setOriginalData(res.data);
+            // }
         } catch (error) {
             console.error("Error fetching insights:", error);
         } finally {
@@ -45,7 +45,7 @@ function Dashboard() {
                 </div>
 
                 <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
-                    <Filters data={originalData} setFilters={setFilters} />
+                    <Filters data={data} setFilters={setFilters} />
                 </div>
             </header>
 
