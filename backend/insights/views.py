@@ -3,28 +3,28 @@ from rest_framework.response import Response
 from .models import Insight
 from .serializers import InsightSerializer
 
-
 @api_view(["GET"])
 def insights_api(request):
-
     queryset = Insight.objects.all()
 
-    filters = {
-        "end_year": request.GET.get("end_year"),
-        "topics": request.GET.get("topics"),
-        "sector": request.GET.get("sector"),
-        "region": request.GET.get("region"),
-        "country": request.GET.get("country"),
-        "city": request.GET.get("city"),
-        "pest": request.GET.get("pest"),
-        "source": request.GET.get("source"),
-        "swot": request.GET.get("swot"),
-    }
+    # Define all possible filter keys
+    filter_keys = [
+        "end_year", "topics", "sector", "region", 
+        "country", "city", "pest", "source", "swot"
+    ]
 
-    for key, value in filters.items():
+    # Dynamically build the filter dictionary
+    # Only include the key if the value exists in the request
+    query_filters = {}
+    for key in filter_keys:
+        value = request.GET.get(key)
         if value:
-            queryset = queryset.filter(**{key: value})
+            # Using __iexact ensures 'healthcare' matches 'Healthcare'
+            query_filters[f"{key}__iexact"] = value
+
+    # Apply all filters at once
+    if query_filters:
+        queryset = queryset.filter(**query_filters)
 
     serializer = InsightSerializer(queryset, many=True)
-
     return Response(serializer.data)
