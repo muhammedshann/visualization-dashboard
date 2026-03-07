@@ -8,20 +8,21 @@ import RegionChart from "../components/RegionChart";
 import YearChart from "../components/YearChart";
 import Filters from "../components/Filter";
 
+// Added the missing 3 charts to complete your list
+import RelevanceChart from "../components/RelevanceChart";
+import CountryChart from "../components/CountryChart";
+import CityChart from "../components/CityChart";
+
 function Dashboard() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({});
-    // const [originalData, setOriginalData] = useState([]);
 
     const loadData = async () => {
         setLoading(true);
         try {
             const res = await fetchInsights(filters);
             setData(res.data);
-            // if (originalData.length === 0) {
-            //     setOriginalData(res.data);
-            // }
         } catch (error) {
             console.error("Error fetching insights:", error);
         } finally {
@@ -57,7 +58,7 @@ function Dashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
 
-                        {/* Intensity & Likelihood - Main Stats */}
+                        {/* Row 1: Intensity & Likelihood - Main Stats */}
                         <div className="lg:col-span-3 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
                             <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Intensity Trends</h3>
                             <IntensityChart data={data} />
@@ -68,7 +69,7 @@ function Dashboard() {
                             <LikelihoodChart data={data} />
                         </div>
 
-                        {/* Topics & Regions - Secondary Breakdowns */}
+                        {/* Row 2: Topics & Regions - Secondary Breakdowns */}
                         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
                             <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Top Topics</h3>
                             <TopicChart data={data} />
@@ -79,7 +80,23 @@ function Dashboard() {
                             <RegionChart data={data} />
                         </div>
 
-                        {/* Year Chart - Full Width Footer Chart */}
+                        {/* Row 3: Relevance, Country & City - Added Section */}
+                        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
+                            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Relevance Score</h3>
+                            <RelevanceChart data={data} />
+                        </div>
+
+                        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
+                            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Top Countries</h3>
+                            <CountryChart data={data} />
+                        </div>
+
+                        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
+                            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Top Cities</h3>
+                            <CityChart data={data} />
+                        </div>
+
+                        {/* Row 4: Year Chart - Full Width Footer Chart */}
                         <div className="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
                             <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Yearly Projection</h3>
                             <YearChart data={data} />
