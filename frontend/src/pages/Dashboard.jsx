@@ -8,7 +8,6 @@ import RegionChart from "../components/RegionChart";
 import YearChart from "../components/YearChart";
 import Filters from "../components/Filter";
 
-// Added the missing 3 charts to complete your list
 import RelevanceChart from "../components/RelevanceChart";
 import CountryChart from "../components/CountryChart";
 import CityChart from "../components/CityChart";
@@ -36,20 +35,21 @@ function Dashboard() {
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-900 p-4 md:p-8">
-            {/* Header Section */}
-            <header className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-slate-800">
-                        Global Insights
-                    </h1>
-                    <p className="text-slate-500 mt-1">Real-time data visualization & analysis</p>
-                </div>
-
-                <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200">
-                    <Filters data={data} setFilters={setFilters} />
-                </div>
+            
+            {/* 1. Header Section - Title gets its own dedicated space */}
+            <header className="max-w-7xl mx-auto mb-6">
+                <h1 className="text-3xl font-extrabold tracking-tight text-slate-800">
+                    Visualization Dashboard
+                </h1>
+                <p className="text-slate-500 mt-1">Data visualization & analysis</p>
             </header>
 
+            {/* 2. Filters Section - Given full width so the 9 dropdowns can breathe */}
+            <div className="max-w-7xl mx-auto mb-8">
+                <Filters data={data} setFilters={setFilters} />
+            </div>
+
+            {/* 3. Main Content Section */}
             <main className="max-w-7xl mx-auto">
                 {loading ? (
                     <div className="flex items-center justify-center h-64">
