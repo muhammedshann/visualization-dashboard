@@ -163,3 +163,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "https://visualization-dashboard-seven.vercel.app",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://visualization-dashboard-pugc.onrender.com",
+    "https://visualization-dashboard-seven.vercel.app"
+]
